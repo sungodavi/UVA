@@ -1,58 +1,57 @@
 import java.util.*;
 import java.io.*;
 
-public class Main {
-	public static void main(String[] args) throws IOException 
+public class Main //11517
+{
+	public static void main(String[] args) throws IOException
 	{
 		BufferedReader f = new BufferedReader(new InputStreamReader(System.in));
-		int cases = Integer.parseInt(f.readLine());
-		while(cases-- > 0)
+		int times = Integer.parseInt(f.readLine());
+		while(times-- > 0)
 		{
-			int[] a = new int[Integer.parseInt(f.readLine())];
-			if(a.length == 0)
-				System.out.println(0);
-			else
+			int value = Integer.parseInt(f.readLine());
+			int[] coins = new int[Integer.parseInt(f.readLine())];
+			int sum = 0;
+			for(int i = 0; i < coins.length; i++)
 			{
-				for(int i = 0; i < a.length; i++)
-					a[i] = Integer.parseInt(f.readLine());
-				System.out.println(Arrays.toString(a));
-				System.out.println(lis(a));
+				int num = Integer.parseInt(f.readLine());
+				coins[i] = num;
+				sum += num;
+			}
+			Arrays.sort(coins);
+			int[] a = new int[sum + 1];
+			for(int i = 1; i <= value; i++)
+			{
+				int best = Integer.MAX_VALUE;
+				for(int c : coins)
+				{
+					if(c > i)
+						break;
+					best = Math.min(a[i - c], best);
+				}
+				if(best == Integer.MAX_VALUE)
+					a[i] = best;
+				else
+					a[i] = best + 1;
+			}
+			if(a[value] >= 0)
+				System.out.println(value + " " + a[value]);
+			for(int i = value + 1; i < a.length; i++)
+			{
+				int best = Integer.MAX_VALUE;
+				for(int c : coins)
+				{
+					if(c > i)
+						break;
+					best = Math.min(a[i - c], best);
+				}
+				if(best == Integer.MAX_VALUE)
+					a[i] = best;
+				else
+				{
+					System.out.println(i + " " + best);
+				}
 			}
 		}
-	}
-	
-	public static int lis(int[] a)
-	{
-		int[] ends = new int[a.length];
-		int length = 1;
-		ends[0] = a[0];
-		for(int i = 1; i < a.length; i++)
-		{
-			if(a[i] < ends[0])
-				ends[0] = a[i];
-			else if(a[i] > ends[length - 1])
-				ends[length++] = a[i];
-			else
-			{
-				int k = search(ends, length, a[i]);
-				ends[k] = a[i];
-			}
-			System.out.println(Arrays.toString(ends) + " " + length);
-		}
-		return length;
-	}
-	public static int search(int[] a, int length, int num)
-	{
-		int high = length - 1;
-		int low = 0;
-		while(low <= high)
-		{
-			int mid = (low + high) / 2;
-			if(a[mid] < num)
-				low = mid + 1;
-			else
-				high = mid - 1;
-		}
-		return low;
 	}
 }
