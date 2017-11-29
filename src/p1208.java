@@ -7,7 +7,6 @@ public class p1208
 	static ArrayList<Edge> list;
 	public static void main(String[] args) throws IOException 
 	{
-		System.setOut(new PrintStream("output.txt"));
 		BufferedReader f = new BufferedReader(new InputStreamReader(System.in));
 		int times = Integer.parseInt(f.readLine());
 		int count = 1;
