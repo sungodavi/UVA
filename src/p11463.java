@@ -24,7 +24,6 @@ public class p11463
 			int end = Integer.parseInt(st.nextToken());
 			int[][] dist = floydWarshall(a);
 			int sum = 0;
-			for(int i = 0; i < a.length; i++)
 		}
 		
 	}
