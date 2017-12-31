@@ -31,7 +31,7 @@ public class p10139 //UNSOLVED
 			return false;
 		for(f = 3; f * f <= a; f += 2)
 		{
-			System.out.println(f + " " + a + " " + " " + n);
+			//System.out.println(f + " " + a + " " + n);
 			e = 0;
 			while(a % f == 0)
 			{
@@ -41,7 +41,8 @@ public class p10139 //UNSOLVED
 			if(e > 0 && count(n, f) < e)
 				return false;
 		}
-		return a == 1 || count(n, f) > 0;
+		//System.out.println(a + " " + f);
+		return a == 1 || count(n, a) > 0;
 	}
 	
 	public static long count(long n, long f)
@@ -49,6 +50,7 @@ public class p10139 //UNSOLVED
 		long sum = 0;
 		for(long i = f; i <= n; i *= f)
 			sum += n / i;
+		///System.out.println(n + " " + f + ": " + sum);
 		return sum;
 	}
 }
