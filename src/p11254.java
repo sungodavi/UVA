@@ -6,11 +6,10 @@ public class p11254
 	public static void main(String[] args) throws IOException
 	{
 		BufferedReader f = new BufferedReader(new InputStreamReader(System.in));
-		int count = 1;
 		for(int num = Integer.parseInt(f.readLine()); num >= 0; num = Integer.parseInt(f.readLine()))
 		{
 			int[] result = solve(num);
-			System.out.printf("Case %d: %d + ... + %d\n", count++, result[0], result[1]);
+			System.out.printf("%d = %d + ... + %d\n", num, result[0], result[1]);
 		}
 		
 	}

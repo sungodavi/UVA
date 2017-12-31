@@ -5,10 +5,9 @@ public class p382
 {
 	public static void main(String[] args) throws IOException
 	{
-		BufferedReader f = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(f.readLine());
+		Scanner scan = new Scanner(System.in);
 		System.out.println("PERFECTION OUTPUT");
-		for(int num = Integer.parseInt(st.nextToken()); num > 0; num = Integer.parseInt(st.nextToken()))
+		for(int num = scan.nextInt(); num > 0; num = scan.nextInt())
 		{
 			int sum = 1;
 			if(num == 1)
