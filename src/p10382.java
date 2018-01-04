@@ -7,13 +7,13 @@ public class p10382
 	public static void main(String[] args) throws IOException 
 	{
 		BufferedReader f = new BufferedReader(new InputStreamReader(System.in));
+		PrintWriter out = new PrintWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st;
-		String input = f.readLine();
-		while(input != null && !input.isEmpty())
+		for(String input = f.readLine(); input != null; input = f.readLine())
 		{
 			st = new StringTokenizer(input);
 			int times = Integer.parseInt(st.nextToken());
-			ArrayList<Sprinkler> list = new ArrayList<Sprinkler>(times);
+			Sprinkler[] a = new Sprinkler[times];
 			l = Integer.parseInt(st.nextToken());
 			w = Integer.parseInt(st.nextToken());
 			for(int i = 0; i < times;i++)
@@ -21,77 +21,60 @@ public class p10382
 				st = new StringTokenizer(f.readLine());
 				int p = Integer.parseInt(st.nextToken());
 				int r = Integer.parseInt(st.nextToken());
-				list.add(new Sprinkler(p,r));
+				a[i] = new Sprinkler(p, r);
 			}
-			Collections.sort(list);
-			for(int i = list.size() - 2; i >= 0; i--)
+			Arrays.sort(a);
+			double currRight = 0;
+			int count = 0;
+			int i = 0;
+			boolean check = true;
+			
+			while(currRight < l && check)
 			{
-				if(list.get(i).contains(list.get(i + 1)))
-					list.remove(i + 1);
-			}
-			System.out.println(list);
-			int count =1;
-			if(list.get(0).left > 0)
-			{
-				System.out.println(-1);
-				input = f.readLine();
-				continue;
-			}
-			boolean found = true;
-			double currRight = list.get(0).right;
-			for(int i = 1; i < list.size(); i++)
-			{
-				if(currRight < list.get(i).left)
+				int best = -1;
+				check = false;
+				int j;
+				for(j = i; j < a.length && a[j].left <= currRight; j++)
 				{
-					found = false;
-					break;
+					check = true;
+					if(best < 0 || a[best].right < a[j].right)
+					{
+						best = j;
+					}
 				}
-				while(i < list.size() && currRight >= list.get(i).left)
-					++i;
-
-				//System.out.println(currRight + " " + a[i]);
-				if(i != list.size())
+				if(best >=0)
 				{
 					count++;
-					currRight = list.get(i).right;
+					currRight = a[best].right;
 				}
+				i = j;
 			}
-			if(!found && currRight < l)
-				System.out.println(-1);
+			if(!check)
+				out.println(-1);
 			else
-				System.out.println(count);
-			input = f.readLine();
+				out.println(count);
 		}
+		out.close();
 	}
 	
 	static class Sprinkler implements Comparable<Sprinkler>
 	{
 		double left, right;
-		public Sprinkler(int p, int r)
+		public Sprinkler(long p, long r)
 		{
 			double temp1 = w * w / 4.0;
 			double temp2 = r * r;
 			double d = Math.sqrt(temp2 - temp1);
-			if(Double.isNaN(d))
-				left = right = p;
-			else
-			{
-				left = Math.max(p - d, 0);
-				right = Math.min(p + d, l);
-			}
+			
+			left = p - d;
+			right = p + d;
 		}
 		
 		public int compareTo(Sprinkler s)
 		{
-			if(left == s.left)
-				return s.right == right ? 0 : s.right < right ? -1 : 1;
-			return left < s.left ? -1 : 1;
+			return Double.compare(left, s.left) == 0 ? Double.compare(s.right, right) : Double.compare(left, s.left);
 		}
 		
-		public boolean contains(Sprinkler s)
-		{
-			return left <= s.left && right >= s.right;
-		}
 		public String toString()
 		{
 			return String.format("%.3f %.3f", left, right);

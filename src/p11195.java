@@ -3,54 +3,47 @@ import java.io.*;
 
 public class p11195 
 {
-	static boolean[] ld, rd, rows;
-	static char[][] bad;
+	static int[] bad;
+	static int OK;
+	static int size;
 	public static void main(String[] args) throws IOException
 	{
 		BufferedReader f = new BufferedReader(new InputStreamReader(System.in));
-		int size = Integer.parseInt(f.readLine());
-		int count = 1;
-		while(size > 0)
+		int caseNo = 0;
+		for(size = Integer.parseInt(f.readLine()); size > 0; size = Integer.parseInt(f.readLine()))
 		{
-			bad = new char[size][size];
-			ld = new boolean[2 * size - 1];
-			rd = new boolean[2 * size - 1];
-			rows = new boolean[size];
-			for(int r = 0; r < bad.length; r++)
+			OK = (1 << size) - 1;
+			bad = new int[size];
+			for(int r = 0; r < size; r++)
 			{
-				bad[r] = f.readLine().toCharArray();
+				String s = f.readLine();
+				for(int c = 0; c < size; c++)
+				{
+					if(s.charAt(c) == '*')
+						bad[c] += 1 << r;
+				}
 			}
-			System.out.printf("Case %d: %d\n", count++, recurse(0, 0));
-			size = Integer.parseInt(f.readLine());
+			System.out.printf("Case %d: %d\n", ++caseNo, backtrack(0, 0, 0, 0));
 		}
 	}
 	
-	public static int recurse(int c, int queenCount)
+	public static int backtrack(int c, int ld, int rd, int rw)
 	{
-		if(c == bad.length)
-		{
-			if(queenCount == bad.length)
-				return 1;
+		if(rw == OK)
+			return 1;
+		if(c == size)
 			return 0;
-		}
+		int pos = OK & (~(ld | rd | rw));
 		int sum = 0;
-		for(int r = 0; r < bad.length; r++)
+		while(pos > 0)
 		{
-			int ldIndex = 2 * bad.length - 2 - r - c;
-			int rdIndex = c - r + bad.length - 1;
-			//System.out.println(ldIndex + " " + rdIndex);
-			if(!rows[r] && !rd[rdIndex] && !ld[ldIndex] && bad[r][c] == '.')
+			int p = pos & -pos;
+			pos -= p;
+			if((bad[c] & p) == 0)
 			{
-				ld[ldIndex] = true;
-				rows[r] = true;
-				rd[rdIndex]= true;
-				sum += recurse(c + 1, queenCount + 1);
-				ld[ldIndex] = false;
-				rows[r] = false;
-				rd[rdIndex]= false;
+				sum += backtrack(c + 1, (ld | p) << 1, (rd | p) >> 1, rw | p);
 			}
 		}
 		return sum;
 	}
-
 }
