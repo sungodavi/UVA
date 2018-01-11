@@ -50,7 +50,7 @@ public class p216
 				}
 			}
 			rebuild(best, 1 << best);
-			out.printf("Number of foot of cable required is %.2f\n", route);
+			out.printf("Number of feet of cable required is %.2f.\n", route);
 		}
 		out.close();
 	}
