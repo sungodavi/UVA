@@ -5,7 +5,9 @@ public class p11284
 {
 	static int[][] dist;
 	static int[][] dp;
+	static int[] savings, map;
 	static int OK;
+	static int recordSize;
 	public static void main(String[] args) throws IOException
 	{
 		BufferedReader f = new BufferedReader(new InputStreamReader(System.in));
@@ -19,6 +21,7 @@ public class p11284
 			st = new StringTokenizer(f.readLine());
 			int size = Integer.parseInt(st.nextToken()) + 1;
 			int roads = Integer.parseInt(st.nextToken());
+			System.out.println(size + " " + roads);
 			int[][] a = new int[size][size];
 			while(roads-- > 0)
 			{
@@ -30,40 +33,33 @@ public class p11284
 				else
 					a[r][c] = a[c][r] = loadDecimal(st.nextToken());
 			}
-			
-			int[][] floyd = floydWarshall(a);
+			dist = floydWarshall(a);
 			
 			int items = Integer.parseInt(f.readLine());
-			int amazon = 0;
-			
-			TreeSet<Integer> set = new TreeSet<Integer>();
+			savings = new int[size];
+			map = new int[items + 1];
+			recordSize = 1;
+			int index = 0;
 			while(items-- > 0)
 			{
 				st = new StringTokenizer(f.readLine());
 				int id = Integer.parseInt(st.nextToken());
-				set.add(id);
-				amazon += loadDecimal(st.nextToken());
+				if(savings[id] == 0)
+				{
+					recordSize++;
+					map[++index] = id;
+				}
+				savings[id] += loadDecimal(st.nextToken());
 			}
-			dist = new int[set.size() + 1][set.size() + 1];
-			dp = new int[set.size() + 1][1 << set.size() + 1];
+
+			dp = new int[recordSize][1 << recordSize];
 			for(int[] temp : dp)
-				Arrays.fill(temp, -1);
-			OK = dp[0].length - 1;
-			int[] map = new int[set.size() + 1];
-			int index = 1;
-			for(int num : set)
-				map[index++] = num;
+				Arrays.fill(temp, Integer.MAX_VALUE);
+			OK = (1 << recordSize) - 1;
 			
-			for(int r = 0; r < dist.length; r++)
-				for(int c = r + 1; c < dist.length; c++)
-					dist[r][c] = dist[c][r] = floyd[map[r]][map[c]];
-					
-			int stores = tsp(0, 1);
-			if(stores < amazon)
-			{
-				int difference = amazon - stores;
-				System.out.printf("Daniel can save $%d.%02d\n", difference / 100, difference % 100);
-			}
+			int result = tsp(0, 1);
+			if(result > 0)
+				System.out.printf("Daniel can save $%d.%02d\n", result / 100, result % 100);
 			else
 				System.out.println("Don't leave the house");
 		}
@@ -73,21 +69,20 @@ public class p11284
 	public static int tsp(int pos, int mask)
 	{
 		if(mask == OK)
-			return dist[pos][0];
+			return -dist[map[pos]][0];
 		
-		//System.out.println(pos + " " + Integer.toBinaryString(mask));
-		if(dp[pos][mask] != -1)
+		if(dp[pos][mask] != Integer.MAX_VALUE)
 			return dp[pos][mask];
 		
-		int result = Integer.MAX_VALUE;
-		for(int i = 0; i < dist.length; i++)
+		int result = -dist[map[pos]][0];
+		for(int i = 0; i < recordSize; i++)
 		{
 			int flag = 1 << i;
 			if((mask & flag) == 0)
-				result = Math.min(result, dist[pos][i] + tsp(i, mask | flag));
+			{
+				result = Math.max(result, savings[map[i]] - dist[map[pos]][map[i]] + tsp(i, mask | flag));
+			}
 		}
-		if(result == Integer.MAX_VALUE)
-			System.out.println("Error: " + pos + " " + Integer.toBinaryString(mask));
 		return dp[pos][mask] = result;
 	}
 	
@@ -107,6 +102,7 @@ public class p11284
 			for(int r = 0; r < a.length; r++)
 				for(int c = 0; c < a.length; c++)
 					dist[r][c] = Math.min(dist[r][c], dist[r][k] + dist[k][c]);
+		
 		return dist;
 	}
 	
