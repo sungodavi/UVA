@@ -21,20 +21,22 @@ public class p10036
 			for(int i = 0; i < a.length; i++)
 				a[i] = Integer.parseInt(st.nextToken());
 			
-			int[][] dp = new int[size][k];
-			dp[0][mod(a[0])] = 1;
+			boolean[][] dp = new boolean[size][k];
+			dp[0][mod(a[0])] = true;
+			//System.out.println(Arrays.toString(dp[0]));
 			for(int i = 1; i < size; i++)
 			{
 				for(int j = 0; j < k; j++)
 				{
-					if(dp[i - 1][j] > 0)
+					if(dp[i - 1][j])
 					{
-						dp[i][mod(j + a[i])] += dp[i - 1][j];
-						dp[i][mod(j - a[i])] += dp[i - 1][j];
+						dp[i][mod(j + a[i])] = true;
+						dp[i][mod(j - a[i])] = true;
 					}
 				}
+				//System.out.println(Arrays.toString(dp[i]));
 			}
-			if(dp[a.length - 1][0] > 0)
+			if(dp[a.length - 1][0])
 				System.out.println("Divisible");
 			else
 				System.out.println("Not divisible");
