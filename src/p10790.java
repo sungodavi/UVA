@@ -1,6 +1,5 @@
 import java.util.*;
 import java.io.*;
-
 public class p10790
 {
 	public static void main(String[] args) throws IOException

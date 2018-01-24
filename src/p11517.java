@@ -12,6 +12,7 @@ public class p11517
 	{
 		BufferedReader f = new BufferedReader(new InputStreamReader(System.in));
 		int times = Integer.parseInt(f.readLine());
+		c = new C();
 		while(times-- > 0)
 		{
 			target = Integer.parseInt(f.readLine());
@@ -19,7 +20,6 @@ public class p11517
 			for(int i = 0; i < coins.length; i++)
 				coins[i] = Integer.parseInt(f.readLine());
 			dp = new Point[coins.length][target];
-			c = new C();
 			Point result = recurse(0, 0, 0);
 			System.out.printf("%d %d\n", result.x, result.y);
 		}
