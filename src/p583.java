@@ -3,11 +3,11 @@ import java.util.*;
 
 public class p583 //UNSOLVED
 {
-	public static ArrayList<Long> list = new ArrayList<Long>();
+	public static ArrayList<Integer> list = new ArrayList<Integer>();
 	public static void main(String[] args) throws IOException
 	{
 		BufferedReader f = new BufferedReader(new InputStreamReader(System.in));
-		load();
+		load((int)1e6);
 		for(String input = f.readLine(); !input.equals("0"); input = f.readLine())
 		{
 			StringBuilder result = new StringBuilder(input);
@@ -39,25 +39,22 @@ public class p583 //UNSOLVED
 		}
 	}
 	
-	public static void load()
+	public static void load(int size)
 	{
-		BitSet a = new BitSet();
-		a.set(0, Integer.MAX_VALUE, true);
-		System.out.println(a.size());
+		boolean[] a = new boolean[size + 1];
 		boolean flag = true;
-		for(int i = 2; i < a.size(); i++)
+		for(int i = 2; i < a.length; i++)
 		{
-			if(a.get(i))
+			if(!a[i])
 			{
-				list.add((long) i);
-				if(!flag || i * i >= a.size())
+				list.add(i);
+				if(flag && i * i > size)
 					flag = false;
 				if(flag)
-					for(int j = i * i; j < a.size(); j *= i)
-						a.clear(j);
+					for(int j = i * i; j < a.length; j += i)
+						a[j] = true;
 			}
 		}
-		list.add((long) Integer.MAX_VALUE);
 	}
 
 }
