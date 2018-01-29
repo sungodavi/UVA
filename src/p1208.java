@@ -31,22 +31,24 @@ public class p1208
 	
 	static void prims()
 	{
-		Queue<Edge> q = new PriorityQueue<Edge>();
-		for(int c = 0; c < a.length; c++)
-			if(a[0][c] > 0)
-				q.add(new Edge(0, c, a[0][c]));
+		Queue<Edge> pq = new PriorityQueue<Edge>();
+		for(int i = 0; i < a.length; i++)
+			if(a[0][i] > 0)
+				pq.add(new Edge(0, i, a[0][i]));
 		boolean[] visited = new boolean[a.length];
 		visited[0] = true;
-		while(!q.isEmpty())
+		while(!pq.isEmpty())
 		{
-			Edge e = q.poll();
-			list.add(e);
+			Edge e = pq.poll();
+			if(visited[e.v])
+				continue;
 			visited[e.v] = true;
-			for(int c = 0; c < a.length; c++)
-			{
-				if(a[e.v][c] > 0 && !visited[c])
-					q.add(new Edge(e.v, c, a[e.v][c]));
-			}
+			list.add(e);
+			int u = e.v;
+			for(int v = 0; v < a.length; v++)
+				if(a[u][v] > 0 && !visited[v])
+					pq.add(new Edge(u, v, a[u][v]));
+					
 		}
 	}
 	
@@ -55,7 +57,6 @@ public class p1208
 	static class Edge implements Comparable<Edge>
 	{
 		int u, v, weight;
-		
 		public Edge(int u, int v, int weight)
 		{
 			this.u = u;
@@ -65,19 +66,14 @@ public class p1208
 		
 		public int compareTo(Edge e)
 		{
-			if(weight == e.weight)
-			{
-				if(Math.min(u, v) == Math.min(e.u, e.v))
-					return Math.max(u, v) - Math.max(e.u, e.v);
-				return Math.min(u, v) - Math.min(e.u, e.v);
-					
-			}
 			return weight - e.weight;
 		}
 		
 		public String toString()
 		{
-			return String.format("%c-%c %d", (char)(Math.min(u, v) + 'A'), (char)(Math.max(u, v) + 'A'), weight);
+			int x = Math.min(u, v);
+			int y = Math.max(u, v);
+			return String.format("%c-%c %d", (char)(x + 'A'), (char)(y + 'A'), weight);
 		}
 	}
 }
