@@ -9,7 +9,7 @@ public class p11475
 		PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
 		
 		for(String input = f.readLine(); input != null; input = f.readLine())
-			System.out.println(solve(input));
+			out.println(solve(input));
 		
 		out.close();
 	}
