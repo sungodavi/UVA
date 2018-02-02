@@ -16,31 +16,52 @@ public class p10635
 			int s1 = Integer.parseInt(st.nextToken());
 			int s2 = Integer.parseInt(st.nextToken());
 			int[] a = new int[s1 + 1];
-			int[] b = new int[s2 + 1];
+			int[] indices = new int[n * n + 1];
+			Arrays.fill(indices, -1);
 			st = new StringTokenizer(f.readLine());
 			for(int i = 0; i < a.length; i++)
 				a[i] = Integer.parseInt(st.nextToken());
 			st = new StringTokenizer(f.readLine());
-			for(int j = 0; j < b.length; j++)
-				b[j] = Integer.parseInt(st.nextToken());
-			out.printf("Case %d: %d\n", t, align(a, b));
+			for(int j = 0; j <= s2; j++)
+				indices[Integer.parseInt(st.nextToken())] = j;
+			//System.out.println(Arrays.toString(indices));
+			
+			ArrayList<Integer> lcs = new ArrayList<Integer>();
+			lcs.add(0);
+			for(int i = 1; i < a.length; i++)
+			{
+				int val = a[i];
+				if(indices[val] >= 0)
+				{
+					if(indices[val] > lcs.get(lcs.size() - 1))
+						lcs.add(indices[val]);
+					else
+					{
+						int index = search(lcs, indices[val]);
+						lcs.set(index + 1, indices[val]);
+					}
+				}
+				//System.out.println(lcs);
+			}
+			out.printf("Case %d: %d\n", t, lcs.size());
 		}
 		out.close();
 	}
 	
-	public static int align(int[] a, int[] b)
+	public static int search(ArrayList<Integer> list, int val)
 	{
-		int[][] dp = new int[a.length + 1][b.length + 1];
-		for(int r = 1; r <= a.length; r++)
+		int low = 0;
+		int high = list.size() - 1;
+		while(low <= high)
 		{
-			for(int c = 1; c <= b.length; c++)
-			{
-				int max = 0;
-				if(a[r - 1] == b[c - 1])
-					max = dp[r - 1][c - 1] + 1;
-				dp[r][c] = Math.max(max, Math.max(dp[r - 1][c], dp[r][c - 1]));
-			}
+			int mid = low + high >> 1;
+			if(list.get(mid) < val && (mid == 0 || list.get(mid + 1) > val))
+				return mid;
+			if(list.get(mid) < val)
+				low = mid + 1;
+			else
+				high = mid - 1;
 		}
-		return dp[a.length][b.length];
+		return -1;
 	}
 }
