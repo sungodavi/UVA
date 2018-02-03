@@ -67,6 +67,8 @@ public class p315
 					articulationPoints[u] = true;
 				dfs_low[u] = Math.min(dfs_low[u], dfs_low[v]);
 			}
+			else if(parent[u] != v)
+				dfs_low[u] = Math.min(dfs_low[u], dfs_num[v]);
 		}
 	}
 }

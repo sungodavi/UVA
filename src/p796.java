@@ -13,13 +13,8 @@ public class p796
 		PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
 		StringTokenizer st;
 		
-		boolean flag = false;
 		for(String input = f.readLine(); input != null; input = f.readLine())
 		{
-			if(flag)
-				out.println();
-			else
-				flag = true;
 			int size = Integer.parseInt(input);
 			parent = new int[size];
 			dfs_low = new int[size];
@@ -51,6 +46,7 @@ public class p796
 			out.printf("%d critical links\n", bridges.size());
 			for(Point p : bridges)
 				out.println(p);
+			out.println();
 		}
 		out.close();
 	}
