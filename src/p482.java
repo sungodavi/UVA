@@ -2,7 +2,8 @@ import java.util.*;
 import java.io.*;
 
 public class p482 {
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException 
+	{
 		BufferedReader f = new BufferedReader(new InputStreamReader(System.in));
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st;
