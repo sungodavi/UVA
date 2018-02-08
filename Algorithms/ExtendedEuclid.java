@@ -1,21 +1,19 @@
-
-public class ExtendedEuclid 
+public class ExtendedEuclid
 {
-	static int x, y, d;
-	
-	static void extendedEuclid(int a, int b)
+	static int x, y;
+	public int extendedEuclid(int a, int b)
 	{
 		if(b == 0)
 		{
-			x = 1;
-			y = 0;
-			d = a;
-			return;
+			x = 0;
+			y = 1;
+			return a;
 		}
-		extendedEuclid(b, a % b);
+		int d = extendedEuclid(b, a % b);
 		int x1 = y;
 		int y1 = x - (a / b) * y;
 		x = x1;
 		y = y1;
+		return d;
 	}
 }
