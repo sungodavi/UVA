@@ -3,9 +3,9 @@ import java.io.*;
 
 public class p10927
 {
-	public static void main(String[] args) throws IOException //UNSOLVED
+	public static void main(String[] args) throws IOException
 	{
-		BufferedReader f = new BufferedReader(new FileReader("input.txt"));
+		BufferedReader f = new BufferedReader(new InputStreamReader(System.in));
 		PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
 		StringTokenizer st;
 		int caseNo = 1;
@@ -25,14 +25,22 @@ public class p10927
 				public int compare(Point a, Point b)
 				{
 					if(a.x == b.x)
-						return a.y - b.y;
-					return a.x - b.x;
+						return Long.compare(a.y, b.y);
+					return Long.compare(a.x, b.x);
 				}
 			});
-			for(int i = 0; i < a.length - 1; i++)
+			Point curr = a[0];
+			for(int i = 1; i < a.length; i++)
 			{
-				if(a[i].collinear(a[i + 1]) && a[i].h >= a[i + 1].h)
-					covered.add(a[i + 1]);
+				if(curr.collinear(a[i]))
+				{
+					if(curr.h >= a[i].h)
+						covered.add(a[i]);
+					else
+						curr = a[i];
+				}
+				else
+					curr = a[i];
 			}
 			out.printf("Data set %d:\n", caseNo++);
 			if(covered.isEmpty())
@@ -59,7 +67,7 @@ public class p10927
 	
 	static class Point implements Comparable<Point>
 	{
-		int x, y, h;
+		long x, y, h;
 		public Point(int x, int y, int h)
 		{
 			this.x = x;
@@ -72,20 +80,19 @@ public class p10927
 			return p.x * y == p.y * x;
 		}
 		
+		public long dist()
+		{
+			return x * x + y * y;
+		}
 		public int compareTo(Point p)
 		{
-			int temp;
-			if(p.x == 0 && x == 0)
-				temp = 0;
-			else if(p.x == 0)
-				temp = 
-			int dx = Math.abs(x) - Math.abs(p.x);
-			int dy = Math.abs(y) - Math.abs(p.y);
-			return temp != 0 ? temp : dx != 0 ? dx : dy;
+			if(collinear(p))
+				return Long.compare(dist(), p.dist());
+			return Long.compare(x * p.y, y * p.x);
 		}
-		
 		public String toString()
 		{
+			//return x + " " + y + " " + h;
 			return String.format("x = %d, y = %d", x, y);
 		}
 	}
