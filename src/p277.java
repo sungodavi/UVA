@@ -35,5 +35,6 @@ public class p277
 		for(i = parts[0].length(); i < 3; i++)
 			result.append("0");
 		result.append(parts[0]);result.append(parts[2]);result.append(',');
+		return result.toString();
 	}
 }

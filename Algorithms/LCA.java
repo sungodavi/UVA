@@ -41,19 +41,27 @@ public class LCA
 	public static int rmq(int[][] table, int s, int e)
 	{
 		int k = lg(e - s + 1);
-		return Math.min(table[k][s], table[k][e - (1 << k) + 1]);
+		if(l[table[k][s]] < l[table[k][e - (1 << k) + 1]])
+			return table[k][s];
+		return table[k][e - (1 << k) + 1];
 	}
 	
 	public static int[][] build(int[] a)
 	{
 		int size = lg(a.length) + 1;
 		int[][] dp = new int[size][a.length];
-		System.arraycopy(a, 0, dp[0], 0, a.length);
+		for(int i = 0; i < a.length; i++)
+			dp[0][i] = i;
 		for(int i = 1; i < size; i++)
 		{
 			int f1 = 1 << (i - 1);
 			for(int j = 0; j + f1 < a.length; j++)
-				dp[i][j] = Math.min(dp[i - 1][j], dp[i - 1][j + f1]);
+			{
+				if(a[dp[i - 1][j]] < a[dp[i - 1][j + f1]])
+					dp[i][j] = dp[i - 1][j];
+				else
+					dp[i][j] = dp[i - 1][j + f1];
+			}
 		}
 		return dp;
 	}
